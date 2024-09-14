@@ -6,6 +6,8 @@ import javax.inject.Inject;
 
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
+import net.runelite.api.events.ChatMessage;
+import net.runelite.api.events.ItemSpawned;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -20,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
+// See https://github.com/runelite/runelite/blob/master/runelite-client/src/main/java/net/runelite/client/plugins/loottracker/LootTrackerPlugin.java#L165
 @Slf4j
 @PluginDescriptor(
         name = "Unique Drop Jingle Plugin"
@@ -74,6 +78,14 @@ public class UniqueDropJinglePlugin extends Plugin {
                 playJingle();
                 return;
             }
+        }
+    }
+
+    @Subscribe
+    public void onItemSpawned(ItemSpawned event) {
+        TileItem item = event.getItem();
+        if (item.getId() == ItemID.BLOOD_SHARD) {
+            playJingle();
         }
     }
 
